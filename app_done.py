@@ -139,35 +139,27 @@ section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] { di
 .brand .t span { color: var(--red); }
 .brand .s { font-size:.95rem; color:#cfd4e0; margin-top:3px; }
 
-.st-key-nav [role="radiogroup"] {
-    --nw: 8.2rem;
-    position:relative; margin-left:auto; width:fit-content; gap:0; padding:5px; border-radius:999px;
+/* Nav pill: three ordinary buttons (works on every Streamlit version, unlike restyling st.radio) */
+.st-key-navbar {
+    width:27rem; max-width:100%; margin-left:auto; padding:5px; border-radius:999px;
     background: var(--glass), rgba(20,24,40,.35); box-shadow: var(--rim), 0 8px 28px rgba(0,0,0,.30);
     backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
     border:1px solid rgba(255,255,255,.16);
 }
-.st-key-nav [role="radiogroup"]::before {
-    content:""; position:absolute; top:5px; bottom:5px; left:5px; width:var(--nw); border-radius:999px;
-    background: linear-gradient(180deg, rgba(255,255,255,.38), rgba(255,255,255,.13));
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.65), inset 0 -1px 0 rgba(255,255,255,.12), 0 6px 18px rgba(0,0,0,.35);
-    transform: translateX(0); will-change: transform;
-    transition: transform .6s cubic-bezier(.34,1.45,.5,1);
+.st-key-navbar [data-testid="stHorizontalBlock"] { gap:0 !important; flex-wrap:nowrap !important; }
+.st-key-navbar [data-testid="stColumn"], .st-key-navbar [data-testid="column"] { min-width:0 !important; flex:1 1 0 !important; }
+.st-key-navbar button {
+    border-radius:999px !important; border:1px solid transparent !important; background:transparent !important;
+    color:#dfe3ee !important; box-shadow:none !important; padding:.5rem 0 !important; filter:none !important; transform:none !important;
+    transition: background .25s, color .25s;
 }
-.st-key-nav [role="radiogroup"]:has(label:nth-child(2) input:checked)::before { transform: translateX(var(--nw)); }
-.st-key-nav [role="radiogroup"]:has(label:nth-child(3) input:checked)::before { transform: translateX(calc(var(--nw) * 2)); }
-/* hover preview: the glass slides under your cursor, click to open */
-.st-key-nav [role="radiogroup"]:has(label:nth-child(1):hover)::before { transform: translateX(0) !important; }
-.st-key-nav [role="radiogroup"]:has(label:nth-child(2):hover)::before { transform: translateX(var(--nw)) !important; }
-.st-key-nav [role="radiogroup"]:has(label:nth-child(3):hover)::before { transform: translateX(calc(var(--nw) * 2)) !important; }
-.st-key-nav label {
-    position:relative; z-index:1; width:var(--nw); margin:0 !important; padding:.58rem 0;
-    justify-content:center; border-radius:999px; cursor:pointer;
+.st-key-navbar button:hover { background: rgba(255,255,255,.14) !important; color:#fff !important; }
+.st-key-navbar button p { font-size:.95rem; white-space:nowrap; }
+.st-key-navbar button[kind="primary"] {
+    background: linear-gradient(180deg, rgba(255,255,255,.38), rgba(255,255,255,.13)) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.65), inset 0 -1px 0 rgba(255,255,255,.12), 0 6px 18px rgba(0,0,0,.35) !important;
+    color:#fff !important; font-weight:600;
 }
-.st-key-nav label > div:first-child { display:none; }
-.st-key-nav label p { font-size:.95rem; color:#dfe3ee; white-space:nowrap; transition: color .25s; }
-.st-key-nav label:hover p, .st-key-nav label:has(input:checked) p { color:#fff; }
-.st-key-nav label:has(input:checked) p { font-weight:600; }
-@media (max-width: 900px) { .st-key-nav [role="radiogroup"] { --nw: 6.4rem; } }
 
 /* ---------- Glass cards ---------- */
 .st-key-prefs_card, .st-key-rent_card, .st-key-results_card, .st-key-page_card {
@@ -175,7 +167,7 @@ section[data-testid="stSidebar"], [data-testid="stSidebarCollapsedControl"] { di
     backdrop-filter: blur(14px) saturate(130%); -webkit-backdrop-filter: blur(14px) saturate(130%);
     border:1px solid rgba(255,255,255,.28); border-radius:32px; padding:1.8rem 2rem;
     box-shadow: var(--rim), 0 24px 70px rgba(0,0,0,.45);
-    transform: translateZ(0); isolation: isolate;
+    isolation: isolate;
 }
 div.card-title { text-shadow: 0 1px 12px rgba(0,0,0,.35); font-size:1.5rem !important; font-weight:700; color:#fff; margin:0; letter-spacing:-0.025em; }
 div.card-sub { font-size:.93rem !important; color:#cfd4e0; margin:.2rem 0 .9rem; }
@@ -218,9 +210,8 @@ div[data-baseweb="input"] input { color:#fff; background: transparent !important
 [data-testid="stNumberInput"] button:hover { transform: scale(1.12); color:#fff !important; border-color: rgba(255,255,255,.5) !important; }
 [data-testid="stNumberInput"] button:active { transform: scale(.94); }
 [data-testid="stNumberInput"] div[data-baseweb="input"] { padding-right:8px; align-items:center; }
-[data-testid="stSlider"] div[data-baseweb="slider"] > div > div { height:6px; border-radius:999px; }
 div[role="slider"] {
-    background:#fff !important; width:22px !important; height:22px !important;
+    background:#fff !important;
     box-shadow: 0 2px 10px rgba(0,0,0,.45), 0 0 0 5px rgba(249,65,68,.30) !important;
 }
 [data-testid="stSliderThumbValue"], [data-testid="stSliderThumbValue"] p { color:#ff6a6d !important; font-weight:600; }
@@ -526,6 +517,13 @@ def sync_budget_number():
     st.session_state["budget_slider"] = st.session_state["budget_number"]
 
 
+PAGES = ["Home", "About", "Data Insights"]
+
+
+def go_to(page_name):
+    st.session_state["nav"] = page_name
+
+
 def show_more():
     st.session_state["show_n"] += PAGE_SIZE
 
@@ -582,8 +580,12 @@ with h1:
         unsafe_allow_html=True,
     )
 with h2:
-    st.radio("Navigation", ["Home", "About", "Data Insights"], horizontal=True,
-             key="nav", label_visibility="collapsed")
+    with st.container(key="navbar"):
+        for _col, _name in zip(st.columns(3), PAGES):
+            with _col:
+                st.button(_name, key=f"nav_{_name}", on_click=go_to, args=(_name,),
+                          type="primary" if st.session_state["nav"] == _name else "secondary",
+                          use_container_width=True)
 
 st.write("")
 page = st.session_state["nav"]
