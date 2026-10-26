@@ -4,4 +4,4 @@ joblib
 numpy
 pandas
 openpyxl
-scikit-learn
+scikit-learn==1.7.0
